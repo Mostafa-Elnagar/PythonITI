@@ -8,3 +8,4 @@ Each module (lab1, lab2, lab3, etc.) contains scripts for different exercises an
 - [lab2](./lab2/)
 - [lab3](./lab3/)
 - [lab4](./lab4/)
+- [OOP Final Project](./OOP/)
