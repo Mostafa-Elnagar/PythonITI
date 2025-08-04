@@ -1,0 +1,106 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Demonstrating \texttt{super()} Behavior in Python Multiple Inheritance}
+\author{}
+\date{}
+
+\definecolor{codegray}{gray}{0.95}
+\lstset{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\footnotesize,
+    frame=single,
+    breaklines=true,
+    tabsize=4,
+    language=Python,
+    showstringspaces=false
+}
+
+\begin{document}
+
+\maketitle
+
+\section*{Objective}
+To demonstrate and understand the behavior of the \texttt{super()} function in Python's multiple inheritance context.
+
+\section*{Python Code Example}
+\begin{lstlisting}
+class A:
+    def process(self):
+        print("A.process")
+        super().process()
+
+class B:
+    def process(self):
+        print("B.process")
+        super().process()
+
+class C:
+    def process(self):
+        print("C.process")
+
+class D(A, B, C):
+    def process(self):
+        print("D.process")
+        super().process()
+
+d = D()
+d.process()
+\end{lstlisting}
+
+\section*{Output}
+\begin{lstlisting}
+D.process
+A.process
+B.process
+C.process
+\end{lstlisting}
+
+\section*{Explanation}
+
+\subsection*{Class Hierarchy}
+
+The inheritance hierarchy is as follows:
+\[
+\texttt{D} \rightarrow \texttt{A} \rightarrow \texttt{B} \rightarrow \texttt{C}
+\]
+
+\subsection*{Method Resolution Order (MRO)}
+
+The MRO determines the order in which Python looks for methods during method calls. For class \texttt{D}, the MRO is:
+
+\begin{verbatim}
+(<class '__main__.D'>, <class '__main__.A'>, <class '__main__.B'>, <class '__main__.C'>, <class 'object'>)
+\end{verbatim}
+
+\subsection*{How \texttt{super()} Works}
+
+\begin{itemize}
+    \item \texttt{d.process()} starts with class \texttt{D}.
+    \item \texttt{super().process()} in \texttt{D} calls \texttt{A.process()} (next in MRO).
+    \item \texttt{super().process()} in \texttt{A} calls \texttt{B.process()}.
+    \item \texttt{super().process()} in \texttt{B} calls \texttt{C.process()}.
+    \item \texttt{C.process()} does not call \texttt{super()}, so the chain stops.
+\end{itemize}
+
+\section*{Key Takeaways}
+\begin{itemize}
+    \item \texttt{super()} uses the MRO, not the direct parent class.
+    \item It enables cooperative multiple inheritance.
+    \item All classes must use \texttt{super()} for the chain to continue.
+    \item MRO follows C3 linearization rules.
+\end{itemize}
+
+\section*{References}
+\begin{itemize}
+    \item Python documentation on \texttt{super()}: \url{https://docs.python.org/3/library/functions.html#super}
+    \item Real Python guide: \url{https://realpython.com/python-super/}
+\end{itemize}
+
+\end{document}
